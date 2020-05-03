@@ -17,15 +17,26 @@ class bcolors:
     FGWHITE = '\033[37m'
     FAIL = '\033[95m'
 
-verbose=False
+
+vulnerableDomains=[]
+suspectedDomains=[]
+isException=False
+x=0
+nsRecords=0
+aRecords=0
+verboseMode=False
+
+
 def myPrint(text, type):
 	if(type=="INFO"):
 		if(verboseMode):
 			print bcolors.INFO+text+bcolors.ENDC
-			return
-		
-	if(type=="INFO_WS"):
+		return
+	if(type=="PLAIN_OUTPUT_WS"):
 		print bcolors.INFO+text+bcolors.ENDC
+		return
+	if(type=="INFOB"):
+		print bcolors.INFO+bcolors.BOLD+text+bcolors.ENDC
 		return
 	if(type=="ERROR"):
 		print bcolors.BGRED+bcolors.FGWHITE+bcolors.BOLD+text+bcolors.ENDC
@@ -36,6 +47,9 @@ def myPrint(text, type):
 	if(type=="INSECURE_WS"):
 		print bcolors.OKRED+bcolors.BOLD+text+bcolors.ENDC
 		return
+	if(type=="INSECURE"):
+		print bcolors.OKRED+bcolors.BOLD+text+bcolors.ENDC+"\n"
+		return
 	if(type=="OUTPUT"):
 		print bcolors.OKBLUE+bcolors.BOLD+text+bcolors.ENDC+"\n"
 		return
@@ -44,6 +58,13 @@ def myPrint(text, type):
 		return
 	if(type=="SECURE"):
 		print bcolors.OKGREEN+bcolors.BOLD+text+bcolors.ENDC
+
+def printList(lst):
+	counter=0
+	for item in lst:
+		counter=counter+1
+		entry=str(counter)+". "+item
+		myPrint("\t"+entry, "INSECURE_WS")
 
 def isVulnerable(domainName):
 
@@ -56,7 +77,7 @@ def isVulnerable(domainName):
 		try:
 			nsRecords = dns.resolver.query(domainName, 'NS')
 		except:
-			myPrint("Exception While Fetching NS Records of "+domainName, "INFO")
+			myPrint("I: Exception While Fetching NS Records of "+domainName, "INFO")
 			isException=True
 			return False
 
@@ -68,17 +89,37 @@ def isVulnerable(domainName):
 		#myPrint("Exception while fetching A records of "+domainName, "INFO")
 	return False
 
-vulnerableDomains=[]
-isException=False
-x=0
-nsRecords=0
-aRecords=0
-verboseMode=False
+
+#########################################################################################
+
+
+#########################################################################################
+print(bcolors.OKRED+"""				
+   	    ) (   (                            
+   	 ( /( )\ ))\ )          )           )  
+   	 )\()(()/(()/(    (  ( /(  (     ( /(  
+   	((_)\ /(_)/(_))  ))\ )\())))\ (  )\()) 
+   	 _((_(_))(_))_  /((_(_))//((_))\(_))/  
+   	| \| / __||   \(_)) | |_(_)) ((_| |_   
+   	| .` \__ \| |) / -_)|  _/ -_/ _||  _|  
+   	|_|\_|___/|___/\___| \__\___\__| \__| 
+
+	"""+bcolors.OKRED+bcolors.BOLD+"""         				
+     # Developed By Shiv Sahni - @shiv__sahni
+"""+bcolors.ENDC)
+
+if ((len(sys.argv)==2) and (sys.argv[1]=="-h" or sys.argv[1]=="--help")):
+	myPrint("Usage: python NSDetect.py -i/--input <pathToCsv> [ -v/-verbose]","ERROR")
+	myPrint("\t-i/--input: Pathname of the CSV file", "ERROR") 
+	myPrint("\t-v/--verbose: For more verbose output", "ERROR")
+	print ""
+	exit(0);
+
 
 if (len(sys.argv)<3):
 	myPrint("Please provide the CSV to initiate the scanning.", "ERROR")
 	print ""
-	myPrint("Usage: python NSDetect.py -i input.csv [-v]","ERROR")
+	myPrint("Usage: python NSDetect.py -i input.csv [-v/--verbose]","ERROR")
 	myPrint("Please try again!!", "ERROR") 
 	print ""
 	exit(1);
@@ -98,8 +139,6 @@ for domain in domains:
 		print str(i)+". ", 
 		i=i+1
 		result=isVulnerable(domain)
-		if (result==False) and (verboseMode==True) and (isException==True):
-			continue
 		if result:
 			vulnerableDomains.append(domain)
 			myPrint(domain,"ERROR")
@@ -107,5 +146,9 @@ for domain in domains:
 			myPrint(domain,"SECURE")
 	except KeyboardInterrupt:
 		break
-print "Total Vulnerable Domains Found: "+str(len(vulnerableDomains))
-print vulnerableDomains
+
+count=len(vulnerableDomains)
+myPrint("\nTotal Vulnerable Domains Found: "+str(count)+"\n", "INFOB")
+if(count>0):
+	myPrint("List of Vulnerable Domains:", "INFOB")
+	printList(vulnerableDomains)
