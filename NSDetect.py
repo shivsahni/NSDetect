@@ -126,7 +126,7 @@ if (len(sys.argv)<3):
 if (sys.argv[1]=="-i" or sys.argv[1]=="--input"):
 	pathToCsv=sys.argv[2]
 
-if (len(sys.argv)>3 and (sys.argv[3]=="-v" or sys.argv[3]=="-verbose")):
+if (len(sys.argv)>3 and (sys.argv[3]=="-v" or sys.argv[3]=="--verbose")):
 	verboseMode=True
 
 colNames=["domain"]
