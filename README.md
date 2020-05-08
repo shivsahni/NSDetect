@@ -5,6 +5,10 @@
 ## Installation
 ### Prerequisites
 - Support For Python 2.7
+- Pandas
+```
+      pip install pandas
+```
 
 ### Reading Suggestions
 * If you are unaware of AWS NS Takeover and want to know more about it read [this](https://medium.com/@shivsahni2/aws-ns-takeover-356d2a293bca) Medium story describing the misconfiguration and providing the walkthrough for automated exploitation. 

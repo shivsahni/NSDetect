@@ -73,21 +73,20 @@ def isVulnerable(domainName):
 	nsRecords=0
 	try:
 		aRecords= dns.resolver.query(domainName)
+	except dns.resolver.NXDOMAIN:
+			return False, "\tI: "+domainName+"  Not Registered-> Getting NXDOMAIN Exception"
 	except dns.resolver.NoNameservers:
 		try:
 			nsRecords = dns.resolver.query(domainName, 'NS')
 		except:
-			myPrint("I: Exception While Fetching NS Records of "+domainName, "INFO")
 			isException=True
-			return False
-
+			return False, "\tI: Exception While Fetching NS Records of "+domainName
 		if len(nsRecords)==0:
 			return False
-		return True
+		return True, ""
 	except:
 		pass
-		#myPrint("Exception while fetching A records of "+domainName, "INFO")
-	return False
+	return False, ""
 
 
 #########################################################################################
@@ -133,22 +132,32 @@ if (len(sys.argv)>3 and (sys.argv[3]=="-v" or sys.argv[3]=="-verbose")):
 colNames=["domain"]
 data = pandas.read_csv(pathToCsv, names=colNames)
 domains=set(data.domain.tolist())
-i=1
+i=0
 for domain in domains:
 	try:
-		print str(i)+". ", 
 		i=i+1
-		result=isVulnerable(domain)
+		result, exceptionMessage=isVulnerable(domain)
 		if result:
 			vulnerableDomains.append(domain)
-			myPrint(domain,"ERROR")
+			myPrint(str(i)+". "+domain,"ERROR")
+		elif((result==False) and (isException==True)):
+			suspectedDomains.append(domain)
+			myPrint(str(i)+". "+domain,"INFOB")
+			myPrint(exceptionMessage, "INFO")
 		else:
-			myPrint(domain,"SECURE")
+			myPrint(str(i)+". "+domain,"SECURE")
+			myPrint(exceptionMessage, "INFO")
 	except KeyboardInterrupt:
 		break
 
-count=len(vulnerableDomains)
-myPrint("\nTotal Vulnerable Domains Found: "+str(count)+"\n", "INFOB")
-if(count>0):
+countV=len(vulnerableDomains)
+myPrint("\nTotal Vulnerable Domains Found: "+str(countV), "INFOB")
+countS=len(suspectedDomains)
+myPrint("Total Suspected Domains Found: "+str(countS)+"\n", "INFOB")
+if(countV>0):
 	myPrint("List of Vulnerable Domains:", "INFOB")
 	printList(vulnerableDomains)
+if(countS>0):
+	myPrint("List of Suspected Domains:", "INFOB")
+	printList(suspectedDomains)
+
