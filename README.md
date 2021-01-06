@@ -6,8 +6,9 @@
 ### Prerequisites
 - Support For Python 2.7
 - Pandas
+- dnspython
 ```
-      pip install pandas
+      pip install pandas dnspython
 ```
 
 ### Reading Suggestions
