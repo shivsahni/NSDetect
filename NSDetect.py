@@ -30,34 +30,34 @@ verboseMode=False
 def myPrint(text, type):
 	if(type=="INFO"):
 		if(verboseMode):
-			print bcolors.INFO+text+bcolors.ENDC
+			print(bcolors.INFO+text+bcolors.ENDC)
 		return
 	if(type=="PLAIN_OUTPUT_WS"):
-		print bcolors.INFO+text+bcolors.ENDC
+		print(bcolors.INFO+text+bcolors.ENDC)
 		return
 	if(type=="INFOB"):
-		print bcolors.INFO+bcolors.BOLD+text+bcolors.ENDC
+		print(bcolors.INFO+bcolors.BOLD+text+bcolors.ENDC)
 		return
 	if(type=="ERROR"):
-		print bcolors.BGRED+bcolors.FGWHITE+bcolors.BOLD+text+bcolors.ENDC
+		print(bcolors.BGRED+bcolors.FGWHITE+bcolors.BOLD+text+bcolors.ENDC)
 		return
 	if(type=="MESSAGE"):
-		print bcolors.TITLE+bcolors.BOLD+text+bcolors.ENDC+"\n"
+		print(bcolors.TITLE+bcolors.BOLD+text+bcolors.ENDC+"\n")
 		return
 	if(type=="INSECURE_WS"):
-		print bcolors.OKRED+bcolors.BOLD+text+bcolors.ENDC
+		print(bcolors.OKRED+bcolors.BOLD+text+bcolors.ENDC)
 		return
 	if(type=="INSECURE"):
-		print bcolors.OKRED+bcolors.BOLD+text+bcolors.ENDC+"\n"
+		print(bcolors.OKRED+bcolors.BOLD+text+bcolors.ENDC+"\n")
 		return
 	if(type=="OUTPUT"):
-		print bcolors.OKBLUE+bcolors.BOLD+text+bcolors.ENDC+"\n"
+		print(bcolors.OKBLUE+bcolors.BOLD+text+bcolors.ENDC+"\n")
 		return
 	if(type=="OUTPUT_WS"):
-		print bcolors.OKBLUE+bcolors.BOLD+text+bcolors.ENDC
+		print(bcolors.OKBLUE+bcolors.BOLD+text+bcolors.ENDC)
 		return
 	if(type=="SECURE"):
-		print bcolors.OKGREEN+bcolors.BOLD+text+bcolors.ENDC
+		print(bcolors.OKGREEN+bcolors.BOLD+text+bcolors.ENDC)
 
 def printList(lst):
 	counter=0
@@ -111,16 +111,16 @@ if ((len(sys.argv)==2) and (sys.argv[1]=="-h" or sys.argv[1]=="--help")):
 	myPrint("Usage: python NSDetect.py -i/--input <pathToCsv> [ -v/-verbose]","ERROR")
 	myPrint("\t-i/--input: Pathname of the CSV file", "ERROR") 
 	myPrint("\t-v/--verbose: For more verbose output", "ERROR")
-	print ""
+	print("")
 	exit(0);
 
 
 if (len(sys.argv)<3):
 	myPrint("Please provide the CSV to initiate the scanning.", "ERROR")
-	print ""
+	print("")
 	myPrint("Usage: python NSDetect.py -i input.csv [-v/--verbose]","ERROR")
 	myPrint("Please try again!!", "ERROR") 
-	print ""
+	print("")
 	exit(1);
 
 if (sys.argv[1]=="-i" or sys.argv[1]=="--input"):
