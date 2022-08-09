@@ -5,6 +5,7 @@
 ## Installation
 ### Prerequisites
 - Support For Python 2.7
+- Support For Python 3.*
 - Pandas
 ```
       pip install pandas
